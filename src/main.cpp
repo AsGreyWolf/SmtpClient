@@ -1,19 +1,9 @@
-#include "smtp_client.hpp"
-#include <fstream>
+#include "mainwindow.hpp"
+#include <QtWidgets/QApplication>
 
-int main() {
-	boost::asio::io_service service;
-	boost::asio::ssl::context ssl_context{
-	    boost::asio::ssl::context::tlsv12_client};
-	smtp_client client{service,
-	                   ssl_context,
-	                   {"smtp.yandex.com", 465},
-	                   {"aidar@fattakhov.su", "password"}};
-	std::ifstream image{"image.jpg"};
-	std::string data(std::istreambuf_iterator<char>{image},
-	                 std::istreambuf_iterator<char>{});
-	client.send({"aidar@fattakhov.su",
-	             "asschool@yandex.ru",
-	             "test",
-	             {{"text/plain", "message"}, {"image/jpeg", data}}});
+int main(int argc, char *argv[]) {
+	QApplication app(argc, argv);
+	MainWindow w;
+	w.show();
+	return app.exec();
 }
