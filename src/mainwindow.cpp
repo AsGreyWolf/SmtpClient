@@ -20,11 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
 		std::ifstream image{"image.jpg"};
 		std::string data(std::istreambuf_iterator<char>{image},
 		                 std::istreambuf_iterator<char>{});
-		client.send({ui->fromEdit->text().toStdString(),
-		             ui->toEdit->text().toStdString(),
-		             ui->subjectEdit->text().toStdString(),
-		             {{"text/html", ui->messageEdit->toHtml().toStdString()},
-		              {"image/jpeg", data}}});
+		client.send(
+		    {ui->fromEdit->text().toStdString(),
+		     ui->toEdit->text().toStdString(),
+		     ui->subjectEdit->text().toStdString(),
+		     {{"text/html; charset=UTF-8", ui->messageEdit->toHtml().toStdString()},
+		      {"image/jpeg", data}}});
 	});
 }
 MainWindow::~MainWindow() {}
