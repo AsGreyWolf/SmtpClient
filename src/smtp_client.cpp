@@ -58,23 +58,21 @@ smtp_client::smtp_client(boost::asio::io_service &service,
 
 void smtp_client::send(const email &to_send) {
 	write("MAIL FROM: " + to_send.from);
-	write("RCPT TO: " + to_send.to);
+	for (auto &to : to_send.to)
+		write("RCPT TO: " + to);
 	write("DATA", 354);
 	std::string boundary = "__abacabadabacabaeabacabadabacaba__sfdssnglk";
-	std::string email = "From: " + to_send.from +
-	                    "\r\n"
-	                    "To: " +
-	                    to_send.to +
-	                    "\r\n"
-	                    "Subject: " +
-	                    to_send.subject +
-	                    "\r\n"
-	                    "MIME-Version: 1.0\r\n"
-	                    "Content-Type: multipart/mixed; "
-	                    "boundary=" +
-	                    boundary +
-	                    "\r\n"
-	                    "\r\n";
+	std::string email = "From: " + to_send.from + "\r\n";
+	for (auto &to : to_send.to)
+		email += "To: " + to + "\r\n";
+	email += "Subject: " + to_send.subject +
+	         "\r\n"
+	         "MIME-Version: 1.0\r\n"
+	         "Content-Type: multipart/mixed; "
+	         "boundary=" +
+	         boundary +
+	         "\r\n"
+	         "\r\n";
 	for (auto &&part : to_send.parts) {
 		email += "--" + boundary +
 		         "\r\n"

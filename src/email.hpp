@@ -14,7 +14,7 @@ struct email_part {
 
 struct email {
 	std::string from;
-	std::string to;
+	std::vector<std::string> to;
 	std::string subject;
 	std::vector<email_part> parts;
 };

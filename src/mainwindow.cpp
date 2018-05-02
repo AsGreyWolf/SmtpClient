@@ -20,9 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
 		std::ifstream image{"image.jpg"};
 		std::string data(std::istreambuf_iterator<char>{image},
 		                 std::istreambuf_iterator<char>{});
+		auto qtTo = ui->toEdit->text().split(QRegExp(R"R(,\s*)R"));
+		std::vector<std::string> to;
+		to.reserve(qtTo.size());
+		transform(qtTo.begin(), qtTo.end(), std::back_inserter(to),
+		          [](const QString &s) { return s.toStdString(); });
 		client.send(
 		    {ui->fromEdit->text().toStdString(),
-		     ui->toEdit->text().toStdString(),
+		     to,
 		     ui->subjectEdit->text().toStdString(),
 		     {{"text/html; charset=UTF-8", ui->messageEdit->toHtml().toStdString()},
 		      {"image/jpeg", data}}});
